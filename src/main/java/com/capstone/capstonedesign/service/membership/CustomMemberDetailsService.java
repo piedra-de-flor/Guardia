@@ -1,4 +1,4 @@
-package com.capstone.capstonedesign.web.controller.membership;
+package com.capstone.capstonedesign.service.membership;
 
 import com.capstone.capstonedesign.domain.entity.Member;
 import com.capstone.capstonedesign.repository.MemberRepository;

@@ -1,12 +1,15 @@
 package com.capstone.capstonedesign.service.membership;
 
 import com.capstone.capstonedesign.domain.entity.Member;
+import com.capstone.capstonedesign.dto.membership.JwtToken;
 import com.capstone.capstonedesign.dto.membership.MemberResponseDto;
 import com.capstone.capstonedesign.dto.membership.MemberSignUpRequestDto;
 import com.capstone.capstonedesign.repository.MemberRepository;
 import com.capstone.capstonedesign.service.support.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,5 +36,14 @@ public class MemberService {
         roles.add("USER");
         Member savedMember = repository.save(signUpDto.toEntity(encodedPassword, roles));
         return MemberResponseDto.fromUser(savedMember);
+    }
+
+    @Transactional
+    public JwtToken signIn(String email, String password) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        return jwtTokenProvider.generateToken(authentication);
     }
 }
