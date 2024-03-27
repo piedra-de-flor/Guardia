@@ -41,9 +41,10 @@ public class MemberController {
     @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
     @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     @PostMapping("/sign-in")
-    public JwtToken signIn(
+    public ResponseEntity<JwtToken> signIn(
             @Parameter(description = "로그인 요청 정보", required = true)
             @RequestBody @Validated MemberSignInDto signInDto) {
-        return service.signIn(signInDto.email(), signInDto.password());
+        JwtToken token = service.signIn(signInDto.email(), signInDto.password());
+        return ResponseEntity.ok(token);
     }
 }
