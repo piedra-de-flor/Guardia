@@ -1,7 +1,6 @@
 package com.capstone.capstonedesign.web.controller.protect.target;
 
-import com.capstone.capstonedesign.dto.protect.target.ProtectedTargetCreateDto;
-import com.capstone.capstonedesign.dto.protect.target.ProtectedTargetIdDto;
+import com.capstone.capstonedesign.dto.protect.target.*;
 import com.capstone.capstonedesign.service.protect.target.ProtectedTargetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,9 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
@@ -33,5 +30,27 @@ public class protectedTargetController {
             @RequestPart @Validated ProtectedTargetCreateDto createDto,
             @RequestPart @Validated MultipartFile image) {
         return ResponseEntity.ok(service.create(createDto, image));
+    }
+
+    @Operation(summary = "보호 대상 단일 조회", description = "자신 소유의 보호 대상을 단일 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "성공")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
+    @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
+    @GetMapping("/protected-target")
+    public ResponseEntity<ProtectedTargetReadDto> read(
+            @Parameter(description = "보호 대상 정보", required = true)
+            @RequestBody ProtectedTargetReadRequestDto readRequestDto) {
+        return ResponseEntity.ok(service.read(readRequestDto));
+    }
+
+    @Operation(summary = "보호 대상 전체 조회", description = "자신 소유의 보호 대상을 전체 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "성공")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
+    @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
+    @GetMapping("/protected-targets/{memberId}")
+    public ResponseEntity<ProtectedTargetReadAllDto> readAll(
+            @Parameter(description = "보호 대상 정보", required = true)
+            @PathVariable Long memberId) {
+        return ResponseEntity.ok(service.readAll(memberId));
     }
 }
