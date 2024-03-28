@@ -31,4 +31,17 @@ public class ProtectedTarget {
         this.age = age;
         this.image = image;
     }
+
+    public void update(String name, String age) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (age != null) {
+            this.age = Integer.parseInt(age);
+        }
+    }
+
+    public boolean isMine(Member member) {
+        return this.member.getId() == member.getId();
+    }
 }

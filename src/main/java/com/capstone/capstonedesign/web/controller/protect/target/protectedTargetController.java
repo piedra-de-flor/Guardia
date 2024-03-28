@@ -38,7 +38,7 @@ public class protectedTargetController {
     @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     @GetMapping("/protected-target")
     public ResponseEntity<ProtectedTargetReadDto> read(
-            @Parameter(description = "보호 대상 정보", required = true)
+            @Parameter(description = "보호 대상 단일 조회 요청값", required = true)
             @RequestBody ProtectedTargetReadRequestDto readRequestDto) {
         return ResponseEntity.ok(service.read(readRequestDto));
     }
@@ -49,8 +49,30 @@ public class protectedTargetController {
     @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     @GetMapping("/protected-targets/{memberId}")
     public ResponseEntity<ProtectedTargetReadAllDto> readAll(
-            @Parameter(description = "보호 대상 정보", required = true)
+            @Parameter(description = "보호 대상 전체 조회 요청값", required = true)
             @PathVariable Long memberId) {
         return ResponseEntity.ok(service.readAll(memberId));
+    }
+
+    @Operation(summary = "보호 대상 수정", description = "자신 소유의 보호 대상을 수정합니다.")
+    @ApiResponse(responseCode = "200", description = "성공")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
+    @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
+    @PatchMapping("/protected-target")
+    public ResponseEntity<ProtectedTargetUpdateDto> update(
+            @Parameter(description = "보호 대상 전체 조회 요청값", required = true)
+            @RequestBody ProtectedTargetUpdateDto updateDto) {
+        return ResponseEntity.ok(service.update(updateDto));
+    }
+
+    @Operation(summary = "보호 대상 삭제", description = "자신 소유의 보호 대상을 삭제합니다.")
+    @ApiResponse(responseCode = "200", description = "성공")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
+    @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
+    @DeleteMapping("/protected-target")
+    public ResponseEntity<Long> update(
+            @Parameter(description = "보호 대상 삭제 요청값", required = true)
+            @RequestBody ProtectedTargetDeleteDto deleteDto) {
+        return ResponseEntity.ok(service.delete(deleteDto));
     }
 }

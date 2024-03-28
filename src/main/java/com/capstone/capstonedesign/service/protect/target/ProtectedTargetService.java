@@ -40,10 +40,7 @@ public class ProtectedTargetService {
     }
 
     public ProtectedTargetReadDto read(ProtectedTargetReadRequestDto readRequestDto) {
-        Member member = memberRepository.findById(readRequestDto.memberId())
-                .orElseThrow(NoSuchElementException::new);
-        ProtectedTarget protectedTarget = repository.findById(readRequestDto.protectedTargetId())
-                        .orElseThrow(NoSuchElementException::new);
+        ProtectedTarget protectedTarget = isMine(readRequestDto.memberId(), readRequestDto.protectedTargetId());
 
         byte[] image = fileManager.loadImageAsResource(protectedTarget.getImage().getStoredFileName());
 
@@ -63,5 +60,30 @@ public class ProtectedTargetService {
         }
 
         return new ProtectedTargetReadAllDto(protectedTargetReadDtos);
+    }
+
+    public ProtectedTargetUpdateDto update(ProtectedTargetUpdateDto updateDto) {
+        ProtectedTarget protectedTarget = isMine(updateDto.memberId(), updateDto.protectedTargetId());
+        protectedTarget.update(updateDto.name(), updateDto.age());
+        return updateDto;
+    }
+
+    public Long delete(ProtectedTargetDeleteDto deleteDto) {
+        ProtectedTarget protectedTarget = isMine(deleteDto.memberId(), deleteDto.protectedTargetId());
+        repository.delete(protectedTarget);
+        return protectedTarget.getId();
+    }
+
+    private ProtectedTarget isMine(long memberId, long protectedTargetId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(NoSuchElementException::new);
+        ProtectedTarget protectedTarget = repository.findById(protectedTargetId)
+                .orElseThrow(NoSuchElementException::new);
+
+        if (protectedTarget.isMine(member)) {
+            throw new IllegalArgumentException("본인 소유의 보호 대상이 아닙니다.");
+        } else {
+            return protectedTarget;
+        }
     }
 }
