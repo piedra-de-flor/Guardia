@@ -42,6 +42,9 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	//iP CAM
+	implementation group: 'org.openpnp', name: 'opencv', version: '4.5.1-1'
 }
 
 tasks.named('bootBuildImage') {
