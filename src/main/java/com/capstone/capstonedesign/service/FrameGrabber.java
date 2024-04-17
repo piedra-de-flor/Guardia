@@ -2,10 +2,8 @@ package com.capstone.capstonedesign.service;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
-import org.opencv.videoio.VideoWriter;
 import org.opencv.videoio.Videoio;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +19,7 @@ public class FrameGrabber {
         VideoCapture capture = new VideoCapture();
 
         // RTSP stream connection
-        if (!capture.open("rtsp://192.168.219.112:8888/h264.sdp")) {
+        if (!capture.open("rtsp://172.20.10.2:8888/h264.sdp")) {
             System.out.println("Error: Couldn't open RTSP stream.");
             return;
         }

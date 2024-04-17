@@ -45,6 +45,9 @@ dependencies {
 
 	//iP CAM
 	implementation group: 'org.openpnp', name: 'opencv', version: '4.5.1-1'
+
+	//AI model
+	implementation 'com.microsoft.onnxruntime:onnxruntime:1.17.3'
 }
 
 tasks.named('bootBuildImage') {
