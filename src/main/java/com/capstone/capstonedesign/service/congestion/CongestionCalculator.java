@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -30,10 +31,20 @@ public class CongestionCalculator {
     }
 
     @Transactional
-    public void calculateHourlyCongestion(int population) {
-        int hour = LocalDateTime.now().getHour();
+    public void calculateHourlyCongestion(int hour) {
         HourlyCongestion hourlyCongestion = hourlyCongestionRepository.getReferenceById(hour);
-        hourlyCongestion.updateAverage(population);
+        LocalDateTime startDateTime = LocalDateTime.now().withHour(hour).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime endDateTime = LocalDateTime.now().withHour(hour).withMinute(59).withSecond(59).withNano(999999999);
+
+        List<Congestion> congestions = congestionRepository.findByDateTimeBetween(startDateTime, endDateTime);
+
+        int population = 0;
+        int amount = congestions.size();
+        for (Congestion congestion : congestions) {
+            population += congestion.getPopulation();
+        }
+
+        hourlyCongestion.updateAverage(population / amount);
         CongestionStatus status = calculateCongestionStatus(hourlyCongestion.getAverage());
 
         if (!hourlyCongestion.getStatus().equals(status.getStatus())) {
@@ -44,7 +55,6 @@ public class CongestionCalculator {
     @Transactional
     public void calculateDayOfWeekCongestion(int population) {
         int dayOfWeek = LocalDate.now().getDayOfWeek().getValue();
-        System.out.println(dayOfWeek);
         DayOfWeekCongestion dayOfWeekCongestion = dayOfWeekCongestionRepository.getReferenceById(dayOfWeek);
         dayOfWeekCongestion.updateAverage(population);
         CongestionStatus status = calculateCongestionStatus(dayOfWeekCongestion.getAverage());
@@ -65,13 +75,6 @@ public class CongestionCalculator {
         if (!monthlyCongestion.getStatus().equals(status.getStatus())) {
             monthlyCongestion.updateStatus(status);
         }
-    }
-
-    public void test(int population) {
-        Congestion congestion = new Congestion(population, calculateCongestionStatus(population));
-        congestionRepository.save(congestion);
-        LiveCongestion liveCongestion = new LiveCongestion(congestion);
-        liveCongestionRepository.save(liveCongestion);
     }
 
     private CongestionStatus calculateCongestionStatus(double population) {

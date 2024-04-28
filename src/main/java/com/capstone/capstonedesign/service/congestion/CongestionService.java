@@ -5,10 +5,14 @@ import com.capstone.capstonedesign.service.cctv.FrameGrabber;
 import com.capstone.capstonedesign.service.support.FileManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,23 +35,10 @@ public class CongestionService {
         pythonRunner.runPythonScript(filePath);
     }
 
-    public void test(int population) {
-        congestionCalculator.test(population);
-    }
-
-    public void test1(int population) {
-        congestionCalculator.calculateCongestion(population);
-    }
-
-    public void testForTime(int population) {
-        congestionCalculator.calculateHourlyCongestion(population);
-    }
-
-    public void testForDay(int population) {
-        congestionCalculator.calculateDayOfWeekCongestion(population);
-    }
-
-    public void testForMonth(int population) {
-        congestionCalculator.calculateMonthlyCongestion(population);
+    @Async
+    @Scheduled(cron = "0 59 * * * *")
+    public void updateHourlyCongestion() {
+        int hour = LocalDateTime.now().getHour();
+        congestionCalculator.calculateHourlyCongestion(hour);
     }
 }

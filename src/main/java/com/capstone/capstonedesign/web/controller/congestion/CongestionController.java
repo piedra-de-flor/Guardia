@@ -26,31 +26,4 @@ public class CongestionController {
         service.testForDay(pop);
         service.testForMonth(pop);
     }
-
-    @GetMapping("/test2/{pop}")
-    public void test2(@PathVariable int pop) {
-        log.info("test1");
-        service.test1(pop);
-        service.testForTime(pop);
-        service.testForDay(pop);
-        service.testForMonth(pop);
-    }
-
-    @GetMapping("/testForTime/{pop}")
-    public void testForTime(@PathVariable int pop) {
-        log.info("test2");
-        service.testForTime(pop);
-    }
-
-    @GetMapping("/testForDay/{pop}")
-    public void testForDay(@PathVariable int pop) {
-        log.info("test3");
-        service.testForDay(pop);
-    }
-
-    @GetMapping("/testForMonth/{pop}")
-    public void testForMonth(@PathVariable int pop) {
-        log.info("test4");
-        service.testForMonth(pop);
-    }
 }
