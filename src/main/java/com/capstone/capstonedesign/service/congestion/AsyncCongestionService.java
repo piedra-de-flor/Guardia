@@ -33,6 +33,9 @@ public class AsyncCongestionService {
     public void updateHourlyCongestion() {
         int hour = LocalDateTime.now().getHour();
         HourlyCongestion hourlyCongestion = hourlyCongestionRepository.getReferenceById(hour);
+
+        log.info("start update hourly congestion : {}", hourlyCongestion.getAverage());
+
         int population = populationCalculator.calculateHourlyPopulation(hour);
         hourlyCongestion.updateAverage(population);
         CongestionStatus status = congestionCalculator.calculateCongestionStatus(hourlyCongestion.getAverage());
@@ -40,6 +43,8 @@ public class AsyncCongestionService {
         if (!hourlyCongestion.getStatus().equals(status.getStatus())) {
             hourlyCongestion.updateStatus(status);
         }
+
+        log.info("update hourly congestion finish : {}", hourlyCongestion.getAverage());
     }
 
     @Async
@@ -48,6 +53,9 @@ public class AsyncCongestionService {
     public void updateDayOfWeekCongestion() {
         int dayOfWeek = LocalDate.now().getDayOfWeek().getValue();
         DayOfWeekCongestion dayOfWeekCongestion = dayOfWeekCongestionRepository.getReferenceById(dayOfWeek);
+
+        log.info("start update day of week congestion : {}", dayOfWeekCongestion.getAverage());
+
         int population = populationCalculator.calculateDayOfWeekPopulation();
         dayOfWeekCongestion.updateAverage(population);
         CongestionStatus status = congestionCalculator.calculateCongestionStatus(dayOfWeekCongestion.getAverage());
@@ -55,6 +63,8 @@ public class AsyncCongestionService {
         if (!dayOfWeekCongestion.getStatus().equals(status.getStatus())) {
             dayOfWeekCongestion.updateStatus(status);
         }
+
+        log.info("update day of week congestion finish : {}", dayOfWeekCongestion.getAverage());
     }
 
     @Async
@@ -63,6 +73,9 @@ public class AsyncCongestionService {
     public void updateMonthlyCongestion() {
         int month = LocalDate.now().getMonthValue();
         MonthlyCongestion monthlyCongestion = monthlyCongestionRepository.getReferenceById(month);
+
+        log.info("start update monthly congestion : {}", monthlyCongestion.getAverage());
+
         int endDay = LocalDate.now().getDayOfMonth();
         int population = populationCalculator.calculateMonthlyPopulation(endDay);
         monthlyCongestion.updateAverage(population);
@@ -71,5 +84,7 @@ public class AsyncCongestionService {
         if (!monthlyCongestion.getStatus().equals(status.getStatus())) {
             monthlyCongestion.updateStatus(status);
         }
+
+        log.info("update monthly congestion finish : {}", monthlyCongestion.getAverage());
     }
 }
