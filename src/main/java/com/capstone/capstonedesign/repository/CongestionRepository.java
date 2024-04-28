@@ -1,6 +1,6 @@
 package com.capstone.capstonedesign.repository;
 
-import com.capstone.capstonedesign.domain.entity.Congestion;
+import com.capstone.capstonedesign.domain.entity.congestion.Congestion;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;

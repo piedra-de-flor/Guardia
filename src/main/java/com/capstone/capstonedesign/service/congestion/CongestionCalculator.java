@@ -1,8 +1,8 @@
 package com.capstone.capstonedesign.service.congestion;
 
-import com.capstone.capstonedesign.domain.entity.Congestion;
-import com.capstone.capstonedesign.domain.entity.HourlyCongestion;
-import com.capstone.capstonedesign.domain.entity.LiveCongestion;
+import com.capstone.capstonedesign.domain.entity.congestion.Congestion;
+import com.capstone.capstonedesign.domain.entity.congestion.HourlyCongestion;
+import com.capstone.capstonedesign.domain.entity.congestion.LiveCongestion;
 import com.capstone.capstonedesign.domain.vo.CongestionStatus;
 import com.capstone.capstonedesign.repository.AveragePopulationRepository;
 import com.capstone.capstonedesign.repository.CongestionRepository;
@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
@@ -42,6 +43,13 @@ public class CongestionCalculator {
         if (!hourlyCongestion.getStatus().equals(status.getStatus())) {
             hourlyCongestion.updateStatus(status);
         }
+    }
+
+    @Transactional
+    public void calculateDayOfWeekCongestion(int population) {
+        int dayOfWeek = LocalDate.now().getDayOfWeek().getValue();
+        System.out.println(dayOfWeek);
+
     }
 
     public void test(int population) {

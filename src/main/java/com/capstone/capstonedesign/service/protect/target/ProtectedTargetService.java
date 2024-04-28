@@ -1,7 +1,7 @@
 package com.capstone.capstonedesign.service.protect.target;
 
-import com.capstone.capstonedesign.domain.entity.Member;
-import com.capstone.capstonedesign.domain.entity.ProtectedTarget;
+import com.capstone.capstonedesign.domain.entity.membership.Member;
+import com.capstone.capstonedesign.domain.entity.protectedTarget.ProtectedTarget;
 import com.capstone.capstonedesign.domain.vo.Image;
 import com.capstone.capstonedesign.dto.protect.target.*;
 import com.capstone.capstonedesign.repository.MemberRepository;

@@ -1,6 +1,6 @@
 package com.capstone.capstonedesign.dto.membership;
 
-import com.capstone.capstonedesign.domain.entity.Member;
+import com.capstone.capstonedesign.domain.entity.membership.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

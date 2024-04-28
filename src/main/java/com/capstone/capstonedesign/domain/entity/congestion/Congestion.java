@@ -1,4 +1,4 @@
-package com.capstone.capstonedesign.domain.entity;
+package com.capstone.capstonedesign.domain.entity.congestion;
 
 import com.capstone.capstonedesign.domain.vo.CongestionStatus;
 import jakarta.persistence.Entity;

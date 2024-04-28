@@ -1,5 +1,6 @@
-package com.capstone.capstonedesign.domain.entity;
+package com.capstone.capstonedesign.domain.entity.congestion;
 
+import com.capstone.capstonedesign.domain.entity.congestion.Congestion;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

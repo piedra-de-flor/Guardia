@@ -1,6 +1,6 @@
 package com.capstone.capstonedesign.service.membership;
 
-import com.capstone.capstonedesign.domain.entity.Member;
+import com.capstone.capstonedesign.domain.entity.membership.Member;
 import com.capstone.capstonedesign.dto.membership.JwtToken;
 import com.capstone.capstonedesign.dto.membership.MemberResponseDto;
 import com.capstone.capstonedesign.dto.membership.MemberSignUpRequestDto;

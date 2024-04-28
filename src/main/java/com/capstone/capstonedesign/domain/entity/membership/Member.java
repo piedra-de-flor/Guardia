@@ -1,5 +1,6 @@
-package com.capstone.capstonedesign.domain.entity;
+package com.capstone.capstonedesign.domain.entity.membership;
 
+import com.capstone.capstonedesign.domain.entity.protectedTarget.ProtectedTarget;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package com.capstone.capstonedesign.service.membership;
 
-import com.capstone.capstonedesign.domain.entity.Member;
+import com.capstone.capstonedesign.domain.entity.membership.Member;
 import com.capstone.capstonedesign.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;

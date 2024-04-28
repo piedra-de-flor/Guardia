@@ -1,5 +1,6 @@
-package com.capstone.capstonedesign.domain.entity;
+package com.capstone.capstonedesign.domain.entity.protectedTarget;
 
+import com.capstone.capstonedesign.domain.entity.membership.Member;
 import com.capstone.capstonedesign.domain.vo.Face;
 import com.capstone.capstonedesign.domain.vo.Image;
 import jakarta.persistence.*;

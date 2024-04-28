@@ -1,4 +1,4 @@
-package com.capstone.capstonedesign.domain.entity;
+package com.capstone.capstonedesign.domain.entity.congestion;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
