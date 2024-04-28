@@ -39,7 +39,15 @@ public class CongestionService {
         congestionCalculator.calculateCongestion(population);
     }
 
-    public void test2(int population) {
+    public void testForTime(int population) {
         congestionCalculator.calculateHourlyCongestion(population);
+    }
+
+    public void testForDay(int population) {
+        congestionCalculator.calculateDayOfWeekCongestion(population);
+    }
+
+    public void testForMonth(int population) {
+        congestionCalculator.calculateMonthlyCongestion(population);
     }
 }

@@ -1,7 +1,9 @@
 package com.capstone.capstonedesign.domain.entity.congestion;
 
-import com.capstone.capstonedesign.domain.entity.congestion.Congestion;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

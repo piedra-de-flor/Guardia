@@ -1,13 +1,8 @@
 package com.capstone.capstonedesign.service.congestion;
 
-import com.capstone.capstonedesign.domain.entity.congestion.Congestion;
-import com.capstone.capstonedesign.domain.entity.congestion.HourlyCongestion;
-import com.capstone.capstonedesign.domain.entity.congestion.LiveCongestion;
+import com.capstone.capstonedesign.domain.entity.congestion.*;
 import com.capstone.capstonedesign.domain.vo.CongestionStatus;
-import com.capstone.capstonedesign.repository.AveragePopulationRepository;
-import com.capstone.capstonedesign.repository.CongestionRepository;
-import com.capstone.capstonedesign.repository.HourlyCongestionRepository;
-import com.capstone.capstonedesign.repository.LiveCongestionRepository;
+import com.capstone.capstonedesign.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,15 +17,16 @@ public class CongestionCalculator {
     private final CongestionRepository congestionRepository;
     private final LiveCongestionRepository liveCongestionRepository;
     private final HourlyCongestionRepository hourlyCongestionRepository;
+    private final DayOfWeekCongestionRepository dayOfWeekCongestionRepository;
+    private final MonthlyCongestionRepository monthlyCongestionRepository;
+
     private final static int C = 5;
 
     @Transactional
     public void calculateCongestion(int population) {
         Congestion congestion = new Congestion(population, calculateCongestionStatus(population));
         Congestion savedCongestion = congestionRepository.save(congestion);
-        populationRepository.getReferenceById(1L).updateAverage(population);
-        LiveCongestion liveCongestion = liveCongestionRepository.getReferenceById(1L);
-        liveCongestion.updateStatus(savedCongestion);
+        updateLiveCongestion(savedCongestion);
     }
 
     @Transactional
@@ -49,7 +45,26 @@ public class CongestionCalculator {
     public void calculateDayOfWeekCongestion(int population) {
         int dayOfWeek = LocalDate.now().getDayOfWeek().getValue();
         System.out.println(dayOfWeek);
+        DayOfWeekCongestion dayOfWeekCongestion = dayOfWeekCongestionRepository.getReferenceById(dayOfWeek);
+        dayOfWeekCongestion.updateAverage(population);
+        CongestionStatus status = calculateCongestionStatus(dayOfWeekCongestion.getAverage());
 
+        if (!dayOfWeekCongestion.getStatus().equals(status.getStatus())) {
+            dayOfWeekCongestion.updateStatus(status);
+        }
+    }
+
+    @Transactional
+    public void calculateMonthlyCongestion(int population) {
+        int month = LocalDate.now().getMonthValue();
+        System.out.println(month);
+        MonthlyCongestion monthlyCongestion = monthlyCongestionRepository.getReferenceById(month);
+        monthlyCongestion.updateAverage(population);
+        CongestionStatus status = calculateCongestionStatus(monthlyCongestion.getAverage());
+
+        if (!monthlyCongestion.getStatus().equals(status.getStatus())) {
+            monthlyCongestion.updateStatus(status);
+        }
     }
 
     public void test(int population) {
@@ -69,5 +84,11 @@ public class CongestionCalculator {
         } else {
             return CongestionStatus.CONFUSION;
         }
+    }
+
+    private void updateLiveCongestion(Congestion congestion) {
+        populationRepository.getReferenceById(1L).updateAverage(congestion.getPopulation());
+        LiveCongestion liveCongestion = liveCongestionRepository.getReferenceById(1L);
+        liveCongestion.updateStatus(congestion);
     }
 }
