@@ -71,6 +71,7 @@ public class ProtectedTargetService {
     public Long delete(ProtectedTargetDeleteDto deleteDto) {
         ProtectedTarget protectedTarget = isMine(deleteDto.memberId(), deleteDto.protectedTargetId());
         repository.delete(protectedTarget);
+        fileManager.deleteExistingImage(protectedTarget.getImage().getStoredFileName());
         return protectedTarget.getId();
     }
 

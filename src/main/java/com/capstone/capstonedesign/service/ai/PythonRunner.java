@@ -1,4 +1,4 @@
-package com.capstone.capstonedesign.service;
+package com.capstone.capstonedesign.service.ai;
 
 import org.springframework.stereotype.Service;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public class PythonRunner {
-    public void runPythonScript(List<String> imageFiles) {
+    public void runPythonScript(String imageFile) {
         try {
             // Python 스크립트 실행 명령어
             String[] command = {"python", "C:\\Users\\USER\\Desktop\\공부\\server_connect\\inference.py"};
@@ -21,9 +21,7 @@ public class PythonRunner {
             // pb.directory(new File("path/to/working/directory"));
 
             // 이미지 파일 이름을 명령어에 추가
-            for (String imageFile : imageFiles) {
-                pb.command().add(imageFile);
-            }
+            pb.command().add(imageFile);
 
             // 환경변수 설정 (선택사항)
             // Map<String, String> env = pb.environment();

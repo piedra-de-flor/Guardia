@@ -1,4 +1,4 @@
-package com.capstone.capstonedesign.service;
+package com.capstone.capstonedesign.service.cctv;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -11,7 +11,8 @@ import java.io.IOException;
 
 @Service
 public class FrameGrabber {
-    public void frameGrab() throws IOException {
+    String filePath;
+    public String frameGrab() throws IOException {
         // Load OpenCV native library
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
@@ -20,8 +21,7 @@ public class FrameGrabber {
 
         // RTSP stream connection
         if (!capture.open("rtsp://172.20.10.2:8888/h264.sdp")) {
-            System.out.println("Error: Couldn't open RTSP stream.");
-            return;
+            throw new IOException("Error: Couldn't open RTSP stream.");
         }
 
         // Frame width and height
@@ -35,7 +35,7 @@ public class FrameGrabber {
         // Capture a frame
         if (capture.read(frame)) {
             // Define the file path and name
-            String filePath = "captured_frame.png";
+            filePath = "captured_frame.png";
 
             // Save the frame as a PNG file
             Imgcodecs.imwrite(filePath, frame);
@@ -47,5 +47,6 @@ public class FrameGrabber {
 
         // Release video capture
         capture.release();
+        return filePath;
     }
 }
