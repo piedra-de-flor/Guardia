@@ -22,8 +22,8 @@ public class ProtectedTargetService {
     private final MemberRepository memberRepository;
     private final FileManager fileManager;
 
-    public ProtectedTargetIdDto create(ProtectedTargetCreateDto createDto, MultipartFile file) {
-        Member member = memberRepository.findById(createDto.memberId())
+    public ProtectedTargetIdDto create(String email, ProtectedTargetCreateDto createDto, MultipartFile file) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(NoSuchElementException::new);
 
         Image image = fileManager.uploadImage(file);
@@ -39,16 +39,16 @@ public class ProtectedTargetService {
         return new ProtectedTargetIdDto(savedProtectedTarget.getId());
     }
 
-    public ProtectedTargetReadDto read(ProtectedTargetReadRequestDto readRequestDto) {
-        ProtectedTarget protectedTarget = isMine(readRequestDto.memberId(), readRequestDto.protectedTargetId());
+    public ProtectedTargetReadDto read(String email, ProtectedTargetReadRequestDto readRequestDto) {
+        ProtectedTarget protectedTarget = isMine(email, readRequestDto.protectedTargetId());
 
         byte[] image = fileManager.loadImageAsResource(protectedTarget.getImage().getStoredFileName());
 
         return new ProtectedTargetReadDto(protectedTarget.getId(), protectedTarget.getName(), protectedTarget.getAge(), image);
     }
 
-    public ProtectedTargetReadAllDto readAll(long memberId) {
-        Member member = memberRepository.findById(memberId)
+    public ProtectedTargetReadAllDto readAll(String email) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(NoSuchElementException::new);
 
         List<ProtectedTarget> protectedTargets = member.getProtectedTargets();
@@ -62,21 +62,21 @@ public class ProtectedTargetService {
         return new ProtectedTargetReadAllDto(protectedTargetReadDtos);
     }
 
-    public ProtectedTargetUpdateDto update(ProtectedTargetUpdateDto updateDto) {
-        ProtectedTarget protectedTarget = isMine(updateDto.memberId(), updateDto.protectedTargetId());
+    public ProtectedTargetUpdateDto update(String email, ProtectedTargetUpdateDto updateDto) {
+        ProtectedTarget protectedTarget = isMine(email, updateDto.protectedTargetId());
         protectedTarget.update(updateDto.name(), updateDto.age());
         return updateDto;
     }
 
-    public Long delete(ProtectedTargetDeleteDto deleteDto) {
-        ProtectedTarget protectedTarget = isMine(deleteDto.memberId(), deleteDto.protectedTargetId());
+    public Long delete(String email, ProtectedTargetDeleteDto deleteDto) {
+        ProtectedTarget protectedTarget = isMine(email, deleteDto.protectedTargetId());
         repository.delete(protectedTarget);
         fileManager.deleteExistingImage(protectedTarget.getImage().getStoredFileName());
         return protectedTarget.getId();
     }
 
-    private ProtectedTarget isMine(long memberId, long protectedTargetId) {
-        Member member = memberRepository.findById(memberId)
+    private ProtectedTarget isMine(String email, long protectedTargetId) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(NoSuchElementException::new);
         ProtectedTarget protectedTarget = repository.findById(protectedTargetId)
                 .orElseThrow(NoSuchElementException::new);

@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +31,10 @@ public class protectedTargetController {
             @Parameter(description = "보호 대상 정보", required = true)
             @RequestPart @Validated ProtectedTargetCreateDto createDto,
             @RequestPart @Validated MultipartFile image) {
-        return ResponseEntity.ok(service.create(createDto, image));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberEmail = authentication.getName();
+
+        return ResponseEntity.ok(service.create(memberEmail, createDto, image));
     }
 
     @Operation(summary = "보호 대상 단일 조회", description = "자신 소유의 보호 대상을 단일 조회합니다.")
@@ -40,18 +45,22 @@ public class protectedTargetController {
     public ResponseEntity<ProtectedTargetReadDto> read(
             @Parameter(description = "보호 대상 단일 조회 요청값", required = true)
             @RequestBody ProtectedTargetReadRequestDto readRequestDto) {
-        return ResponseEntity.ok(service.read(readRequestDto));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberEmail = authentication.getName();
+
+        return ResponseEntity.ok(service.read(memberEmail, readRequestDto));
     }
 
     @Operation(summary = "보호 대상 전체 조회", description = "자신 소유의 보호 대상을 전체 조회합니다.")
     @ApiResponse(responseCode = "200", description = "성공")
     @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
     @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
-    @GetMapping("/protected-targets/{memberId}")
-    public ResponseEntity<ProtectedTargetReadAllDto> readAll(
-            @Parameter(description = "보호 대상 전체 조회 요청값", required = true)
-            @PathVariable Long memberId) {
-        return ResponseEntity.ok(service.readAll(memberId));
+    @GetMapping("/protected-targets")
+    public ResponseEntity<ProtectedTargetReadAllDto> readAll() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberEmail = authentication.getName();
+
+        return ResponseEntity.ok(service.readAll(memberEmail));
     }
 
     @Operation(summary = "보호 대상 수정", description = "자신 소유의 보호 대상을 수정합니다.")
@@ -62,7 +71,10 @@ public class protectedTargetController {
     public ResponseEntity<ProtectedTargetUpdateDto> update(
             @Parameter(description = "보호 대상 전체 조회 요청값", required = true)
             @RequestBody ProtectedTargetUpdateDto updateDto) {
-        return ResponseEntity.ok(service.update(updateDto));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberEmail = authentication.getName();
+
+        return ResponseEntity.ok(service.update(memberEmail, updateDto));
     }
 
     @Operation(summary = "보호 대상 삭제", description = "자신 소유의 보호 대상을 삭제합니다.")
@@ -73,6 +85,9 @@ public class protectedTargetController {
     public ResponseEntity<Long> update(
             @Parameter(description = "보호 대상 삭제 요청값", required = true)
             @RequestBody ProtectedTargetDeleteDto deleteDto) {
-        return ResponseEntity.ok(service.delete(deleteDto));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberEmail = authentication.getName();
+
+        return ResponseEntity.ok(service.delete(memberEmail, deleteDto));
     }
 }
