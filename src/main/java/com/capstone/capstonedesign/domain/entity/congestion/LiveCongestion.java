@@ -1,9 +1,7 @@
 package com.capstone.capstonedesign.domain.entity.congestion;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import com.capstone.capstonedesign.domain.entity.cctv.CCTV;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +13,9 @@ import lombok.NoArgsConstructor;
 @Entity
 public class LiveCongestion {
     @Id
-    private long id = 1;
+    @OneToOne
+    private CCTV cctv;
+
     @OneToOne
     @JoinColumn(name = "dateTime")
     private Congestion congestion;

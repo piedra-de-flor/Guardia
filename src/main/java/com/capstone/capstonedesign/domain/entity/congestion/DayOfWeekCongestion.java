@@ -1,8 +1,11 @@
 package com.capstone.capstonedesign.domain.entity.congestion;
 
+import com.capstone.capstonedesign.domain.entity.cctv.CCTV;
 import com.capstone.capstonedesign.domain.vo.CongestionStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +20,10 @@ public class DayOfWeekCongestion {
     private int population;
     private int amount;
     private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "cctv_id")
+    private CCTV cctv;
 
     public void updateAverage(int population) {
         this.amount++;

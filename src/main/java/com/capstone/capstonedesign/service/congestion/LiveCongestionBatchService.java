@@ -15,7 +15,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class AsyncLiveCongestionService {
+public class LiveCongestionBatchService {
     private final LiveCongestionService liveCongestionService;
     private final FrameGrabber frameGrabber;
     private final PythonRunner pythonRunner;

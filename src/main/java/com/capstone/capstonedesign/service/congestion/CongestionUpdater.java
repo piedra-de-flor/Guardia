@@ -1,16 +1,14 @@
 package com.capstone.capstonedesign.service.congestion;
 
+import com.capstone.capstonedesign.domain.entity.cctv.CCTV;
 import com.capstone.capstonedesign.domain.entity.congestion.DayOfWeekCongestion;
 import com.capstone.capstonedesign.domain.entity.congestion.HourlyCongestion;
 import com.capstone.capstonedesign.domain.entity.congestion.MonthlyCongestion;
 import com.capstone.capstonedesign.domain.vo.CongestionStatus;
-import com.capstone.capstonedesign.repository.DayOfWeekCongestionRepository;
-import com.capstone.capstonedesign.repository.HourlyCongestionRepository;
-import com.capstone.capstonedesign.repository.MonthlyCongestionRepository;
+import com.capstone.capstonedesign.repository.AveragePopulationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,23 +18,19 @@ import java.time.LocalDateTime;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class AsyncCongestionService {
-    private final HourlyCongestionRepository hourlyCongestionRepository;
-    private final DayOfWeekCongestionRepository dayOfWeekCongestionRepository;
-    private final MonthlyCongestionRepository monthlyCongestionRepository;
+public class CongestionUpdater {
     private final PopulationCalculator populationCalculator;
     private final CongestionCalculator congestionCalculator;
 
     @Async
-    @Scheduled(cron = "0 59 * * * *")
     @Transactional
-    public void updateHourlyCongestion() {
+    public void updateHourlyCongestion(CCTV cctv) {
         int hour = LocalDateTime.now().getHour();
-        HourlyCongestion hourlyCongestion = hourlyCongestionRepository.getReferenceById(hour);
+        HourlyCongestion hourlyCongestion = cctv.getHourlyCongestionList().get(hour);
 
-        log.info("start update hourly congestion : {}", hourlyCongestion.getAverage());
+        log.info("start update hourly congestion : {}", cctv.getId());
 
-        int population = populationCalculator.calculateHourlyPopulation(hour);
+        int population = populationCalculator.calculateHourlyPopulation(hour, cctv.getId());
         hourlyCongestion.updateAverage(population);
         CongestionStatus status = congestionCalculator.calculateCongestionStatus(hourlyCongestion.getAverage());
 
@@ -44,19 +38,18 @@ public class AsyncCongestionService {
             hourlyCongestion.updateStatus(status);
         }
 
-        log.info("update hourly congestion finish : {}", hourlyCongestion.getAverage());
+        log.info("update hourly congestion finish : {}", cctv.getId());
     }
 
     @Async
-    @Scheduled(cron = "0 58 23 * * *")
     @Transactional
-    public void updateDayOfWeekCongestion() {
+    public void updateDayOfWeekCongestion(CCTV cctv) {
         int dayOfWeek = LocalDate.now().getDayOfWeek().getValue();
-        DayOfWeekCongestion dayOfWeekCongestion = dayOfWeekCongestionRepository.getReferenceById(dayOfWeek);
+        DayOfWeekCongestion dayOfWeekCongestion = cctv.getDayOfWeekCongestions().get(dayOfWeek);
 
-        log.info("start update day of week congestion : {}", dayOfWeekCongestion.getAverage());
+        log.info("start update day of week congestion : {}", cctv.getId());
 
-        int population = populationCalculator.calculateDayOfWeekPopulation();
+        int population = populationCalculator.calculateDayOfWeekPopulation(cctv.getId());
         dayOfWeekCongestion.updateAverage(population);
         CongestionStatus status = congestionCalculator.calculateCongestionStatus(dayOfWeekCongestion.getAverage());
 
@@ -64,20 +57,19 @@ public class AsyncCongestionService {
             dayOfWeekCongestion.updateStatus(status);
         }
 
-        log.info("update day of week congestion finish : {}", dayOfWeekCongestion.getAverage());
+        log.info("update day of week congestion finish : {}", cctv.getId());
     }
 
     @Async
-    @Scheduled(cron = "0 59 23 L * ?")
     @Transactional
-    public void updateMonthlyCongestion() {
+    public void updateMonthlyCongestion(CCTV cctv) {
         int month = LocalDate.now().getMonthValue();
-        MonthlyCongestion monthlyCongestion = monthlyCongestionRepository.getReferenceById(month);
+        MonthlyCongestion monthlyCongestion = cctv.getMonthlyCongestions().get(month);
 
-        log.info("start update monthly congestion : {}", monthlyCongestion.getAverage());
+        log.info("start update monthly congestion : {}", cctv.getId());
 
         int endDay = LocalDate.now().getDayOfMonth();
-        int population = populationCalculator.calculateMonthlyPopulation(endDay);
+        int population = populationCalculator.calculateMonthlyPopulation(endDay, cctv.getId());
         monthlyCongestion.updateAverage(population);
         CongestionStatus status = congestionCalculator.calculateCongestionStatus(monthlyCongestion.getAverage());
 
@@ -85,6 +77,6 @@ public class AsyncCongestionService {
             monthlyCongestion.updateStatus(status);
         }
 
-        log.info("update monthly congestion finish : {}", monthlyCongestion.getAverage());
+        log.info("update monthly congestion finish : {}", cctv.getId());
     }
 }
