@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
@@ -28,7 +29,7 @@ public class MemberService {
     @Transactional
     public MemberResponseDto signUp(MemberSignUpRequestDto signUpDto) {
         if (repository.findByEmail(signUpDto.email()).isPresent()) {
-            throw new IllegalArgumentException("이미 사용 중인 사용자 이름입니다.");
+            throw new IllegalArgumentException("이미 사용 중인 사용자 email 입니다.");
         }
 
         String encodedPassword = passwordEncoder.encode(signUpDto.password());
@@ -45,5 +46,14 @@ public class MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         return jwtTokenProvider.generateToken(authentication);
+    }
+
+    @Transactional
+    public boolean delete(String email) {
+        Member member = repository.findByEmail(email)
+                .orElseThrow(NoSuchElementException::new);
+
+        repository.delete(member);
+        return true;
     }
 }

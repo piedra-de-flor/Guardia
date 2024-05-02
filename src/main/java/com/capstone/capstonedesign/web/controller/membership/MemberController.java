@@ -12,7 +12,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,5 +49,18 @@ public class MemberController {
             @RequestBody @Validated MemberSignInDto signInDto) {
         JwtToken token = service.signIn(signInDto.email(), signInDto.password());
         return ResponseEntity.ok(token);
+    }
+
+    @Operation(summary = "회원 삭제", description = "JWT토큰과 이메일을 통해 회원정보를 삭제합니다")
+    @ApiResponse(responseCode = "200", description = "성공")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
+    @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
+    @DeleteMapping("/member")
+    public ResponseEntity<Boolean> delete() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberEmail = authentication.getName();
+
+        boolean response = service.delete(memberEmail);
+        return ResponseEntity.ok(response);
     }
 }
