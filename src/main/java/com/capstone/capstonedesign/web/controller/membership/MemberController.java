@@ -15,10 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -49,6 +46,45 @@ public class MemberController {
             @RequestBody @Validated MemberSignInDto signInDto) {
         JwtToken token = service.signIn(signInDto.email(), signInDto.password());
         return ResponseEntity.ok(token);
+    }
+
+    @Operation(summary = "회원 정보 조회", description = "JWT토큰을 통해 회원 정보를 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "성공")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
+    @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
+    @GetMapping("/member")
+    public ResponseEntity<MemberResponseDto> read() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberEmail = authentication.getName();
+
+        MemberResponseDto response = service.read(memberEmail);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "회원 닉네임 수정", description = "회원의 nickName을 수정합니다.")
+    @ApiResponse(responseCode = "200", description = "성공")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
+    @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
+    @PatchMapping("/member/nick-name")
+    public ResponseEntity<String> updateNickName(@RequestBody String nickName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberEmail = authentication.getName();
+
+        String response = service.updateNickName(memberEmail, nickName);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "회원 비밀번호 수정", description = "회원의 password을 수정합니다.")
+    @ApiResponse(responseCode = "200", description = "성공")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
+    @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
+    @PatchMapping("/member/password")
+    public ResponseEntity<Boolean> updatePassword(@RequestBody String password) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberEmail = authentication.getName();
+
+        boolean response = service.updatePassword(memberEmail, password);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "회원 삭제", description = "JWT토큰과 이메일을 통해 회원정보를 삭제합니다")

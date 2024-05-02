@@ -48,6 +48,32 @@ public class MemberService {
         return jwtTokenProvider.generateToken(authentication);
     }
 
+    public MemberResponseDto read(String email) {
+        Member member =repository.findByEmail(email)
+                .orElseThrow(NoSuchElementException::new);
+
+        MemberResponseDto response = MemberResponseDto.fromUser(member);
+        return response;
+    }
+
+    @Transactional
+    public String updateNickName(String email, String nickName) {
+        Member member =repository.findByEmail(email)
+                .orElseThrow(NoSuchElementException::new);
+
+        String response = member.updateNickName(nickName);
+        return response;
+    }
+
+    @Transactional
+    public Boolean updatePassword(String email, String password) {
+        Member member =repository.findByEmail(email)
+                .orElseThrow(NoSuchElementException::new);
+
+        boolean response = member.updatePassword(password);
+        return response;
+    }
+
     @Transactional
     public boolean delete(String email) {
         Member member = repository.findByEmail(email)
