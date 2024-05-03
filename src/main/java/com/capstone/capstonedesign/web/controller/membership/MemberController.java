@@ -64,6 +64,7 @@ public class MemberController {
     @Operation(summary = "회원 닉네임 수정", description = "회원의 nickName을 수정합니다.")
     @ApiResponse(responseCode = "200", description = "성공")
     @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
+    @ApiResponse(responseCode = "403", description = "JWT토큰이 잘못되었습니다")
     @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     @PatchMapping("/member/nick-name")
     public ResponseEntity<String> updateNickName(@RequestBody String nickName) {
@@ -77,6 +78,7 @@ public class MemberController {
     @Operation(summary = "회원 비밀번호 수정", description = "회원의 password을 수정합니다.")
     @ApiResponse(responseCode = "200", description = "성공")
     @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
+    @ApiResponse(responseCode = "403", description = "JWT토큰이 잘못되었습니다")
     @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     @PatchMapping("/member/password")
     public ResponseEntity<Boolean> updatePassword(@RequestBody String password) {
@@ -90,6 +92,7 @@ public class MemberController {
     @Operation(summary = "회원 삭제", description = "JWT토큰과 이메일을 통해 회원정보를 삭제합니다")
     @ApiResponse(responseCode = "200", description = "성공")
     @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
+    @ApiResponse(responseCode = "403", description = "JWT토큰이 잘못되었습니다")
     @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     @DeleteMapping("/member")
     public ResponseEntity<Boolean> delete() {
