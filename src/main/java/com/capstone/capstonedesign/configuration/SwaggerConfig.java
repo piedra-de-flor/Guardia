@@ -17,8 +17,8 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-                .title("Triple API Test")
-                .description("Triple clone coding API test swagger")
+                .title("Capstone design API Test")
+                .description("Capstone design v 0.1 API swagger")
                 .version("2.2.0");
     }
 }
