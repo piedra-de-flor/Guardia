@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/sign-in", "/sign-up").permitAll()
-                        .requestMatchers("/api-statement").permitAll()
+                        .requestMatchers("/api-statement", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().hasRole("USER")
                 )
                 .addFilterBefore(new JwtAuthFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class).build();

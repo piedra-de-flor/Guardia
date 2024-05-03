@@ -19,6 +19,6 @@ public class SwaggerConfig {
         return new Info()
                 .title("Capstone design API Test")
                 .description("Capstone design v 0.1 API swagger")
-                .version("2.2.0");
+                .version("0.1");
     }
 }
