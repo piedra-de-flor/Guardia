@@ -7,9 +7,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -33,5 +38,14 @@ public class MonthlyCongestion {
 
     public void updateStatus(CongestionStatus status) {
         this.status = status.getStatus();
+    }
+
+    public static List<MonthlyCongestion> createEmptyMonthlyCongestion(CCTV cctv) {
+        List<MonthlyCongestion> response = new ArrayList<>();
+        for (int month = 1; month < 13; month++) {
+            MonthlyCongestion monthlyCongestion = new MonthlyCongestion(month, 0, 0, 0, null, cctv);
+            response.add(monthlyCongestion);
+        }
+        return response;
     }
 }

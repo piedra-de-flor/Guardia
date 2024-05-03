@@ -21,9 +21,16 @@ public class PopulationCalculator {
         List<Congestion> congestions = congestionRepository.findByDateTimeBetween(startDateTime, endDateTime).stream()
                 .filter(congestion -> congestion.getCctv().getId() == cctvId)
                 .toList();
-
+        for (Congestion congestion : congestions) {
+            System.out.println(congestion.getDateTime());
+        }
         int population = 0;
         int amount = congestions.size();
+
+        if (amount == 0) {
+            return 0;
+        }
+
         for (Congestion congestion : congestions) {
             population += congestion.getPopulation();
         }

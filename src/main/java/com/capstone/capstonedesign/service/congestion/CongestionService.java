@@ -1,30 +1,28 @@
 package com.capstone.capstonedesign.service.congestion;
 
+import com.capstone.capstonedesign.domain.entity.cctv.CCTV;
 import com.capstone.capstonedesign.domain.entity.congestion.*;
 import com.capstone.capstonedesign.dto.congestion.LiveCongestionDto;
 import com.capstone.capstonedesign.dto.congestion.PeriodCongestionDto;
-import com.capstone.capstonedesign.repository.DayOfWeekCongestionRepository;
-import com.capstone.capstonedesign.repository.HourlyCongestionRepository;
-import com.capstone.capstonedesign.repository.LiveCongestionRepository;
-import com.capstone.capstonedesign.repository.MonthlyCongestionRepository;
+import com.capstone.capstonedesign.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class CongestionService {
-    private final LiveCongestionRepository liveCongestionRepository;
-    private final HourlyCongestionRepository hourlyCongestionRepository;
-    private final DayOfWeekCongestionRepository dayOfWeekCongestionRepository;
-    private final MonthlyCongestionRepository monthlyCongestionRepository;
+    private final CCTVRepository cctvRepository;
 
-    public LiveCongestionDto readLiveCongestion() {
-        LiveCongestion liveCongestion = liveCongestionRepository.getReferenceById(0L);
+    public LiveCongestionDto readLiveCongestion(long cctvId) {
+        CCTV cctv = cctvRepository.findById(cctvId)
+                .orElseThrow(NoSuchElementException::new);
+        LiveCongestion liveCongestion = cctv.getLiveCongestion();
         Congestion congestion = liveCongestion.getCongestion();
 
         return new LiveCongestionDto(
@@ -32,8 +30,10 @@ public class CongestionService {
                 congestion.getStatus());
     }
 
-    public List<PeriodCongestionDto> readHourlyCongestion() {
-        List<HourlyCongestion> hourlyCongestions = hourlyCongestionRepository.findAll();
+    public List<PeriodCongestionDto> readHourlyCongestion(long cctvId) {
+        CCTV cctv = cctvRepository.findById(cctvId)
+                .orElseThrow(NoSuchElementException::new);
+        List<HourlyCongestion> hourlyCongestions = cctv.getHourlyCongestions();
         List<PeriodCongestionDto> response = new ArrayList<>();
 
         for (HourlyCongestion hourlyCongestion : hourlyCongestions) {
@@ -47,8 +47,10 @@ public class CongestionService {
         return response;
     }
 
-    public List<PeriodCongestionDto> readDayOfWeekCongestion() {
-        List<DayOfWeekCongestion> dayOfWeekCongestions = dayOfWeekCongestionRepository.findAll();
+    public List<PeriodCongestionDto> readDayOfWeekCongestion(long cctvId) {
+        CCTV cctv = cctvRepository.findById(cctvId)
+                .orElseThrow(NoSuchElementException::new);
+        List<DayOfWeekCongestion> dayOfWeekCongestions = cctv.getDayOfWeekCongestions();
         List<PeriodCongestionDto> response = new ArrayList<>();
 
         for (DayOfWeekCongestion dayOfWeekCongestion : dayOfWeekCongestions) {
@@ -62,8 +64,10 @@ public class CongestionService {
         return response;
     }
 
-    public List<PeriodCongestionDto> readMonthlyCongestion() {
-        List<MonthlyCongestion> monthlyCongestions = monthlyCongestionRepository.findAll();
+    public List<PeriodCongestionDto> readMonthlyCongestion(long cctvId) {
+        CCTV cctv = cctvRepository.findById(cctvId)
+                .orElseThrow(NoSuchElementException::new);
+        List<MonthlyCongestion> monthlyCongestions = cctv.getMonthlyCongestions();
         List<PeriodCongestionDto> response = new ArrayList<>();
 
         for (MonthlyCongestion monthlyCongestion : monthlyCongestions) {

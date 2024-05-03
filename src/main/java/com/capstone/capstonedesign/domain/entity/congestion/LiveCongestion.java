@@ -13,12 +13,21 @@ import lombok.NoArgsConstructor;
 @Entity
 public class LiveCongestion {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     @OneToOne
+    @JoinColumn(name = "cctv_id")
     private CCTV cctv;
 
     @OneToOne
     @JoinColumn(name = "dateTime")
     private Congestion congestion;
+
+    public LiveCongestion(CCTV cctv, Congestion congestion) {
+        this.cctv = cctv;
+        this.congestion = congestion;
+    }
 
     public void updateStatus(Congestion congestion) {
         this.congestion = congestion;

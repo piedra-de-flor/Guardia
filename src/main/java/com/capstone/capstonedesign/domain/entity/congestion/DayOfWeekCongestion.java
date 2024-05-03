@@ -7,9 +7,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -33,5 +38,14 @@ public class DayOfWeekCongestion {
 
     public void updateStatus(CongestionStatus status) {
         this.status = status.getStatus();
+    }
+
+    public static List<DayOfWeekCongestion> createEmptyDayOfWeekCongestion(CCTV cctv) {
+        List<DayOfWeekCongestion> response = new ArrayList<>();
+        for (int dayOfWeek = 1; dayOfWeek < 8; dayOfWeek++) {
+            DayOfWeekCongestion dayOfWeekCongestion = new DayOfWeekCongestion(dayOfWeek, 0, 0, 0, null, cctv);
+            response.add(dayOfWeekCongestion);
+        }
+        return response;
     }
 }

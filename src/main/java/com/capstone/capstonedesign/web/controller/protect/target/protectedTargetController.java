@@ -82,7 +82,7 @@ public class protectedTargetController {
     @ApiResponse(responseCode = "400", description = "잘못된 요청 형식입니다")
     @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     @DeleteMapping("/protected-target")
-    public ResponseEntity<Long> update(
+    public ResponseEntity<Long> delete(
             @Parameter(description = "보호 대상 삭제 요청값", required = true)
             @RequestBody ProtectedTargetDeleteDto deleteDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

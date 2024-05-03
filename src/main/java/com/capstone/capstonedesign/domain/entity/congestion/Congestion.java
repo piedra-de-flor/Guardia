@@ -25,9 +25,10 @@ public class Congestion {
     @JoinColumn(name = "cctv_id")
     private CCTV cctv;
 
-    public Congestion(int population, CongestionStatus status) {
+    public Congestion(int population, CongestionStatus status, CCTV cctv) {
         this.population = population;
         this.status = status.getStatus();
+        this.cctv = cctv;
         this.dateTime = LocalDateTime.now();
     }
 }
