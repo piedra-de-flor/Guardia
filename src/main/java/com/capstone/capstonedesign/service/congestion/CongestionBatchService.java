@@ -46,7 +46,5 @@ public class CongestionBatchService {
         for (CCTV cctv : cctvs) {
             congestionUpdater.updateMonthlyCongestion(cctv);
         }
-
-        congestionRepository.deleteAll();
     }
 }
