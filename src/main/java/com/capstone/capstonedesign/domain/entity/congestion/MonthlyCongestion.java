@@ -2,14 +2,8 @@ package com.capstone.capstonedesign.domain.entity.congestion;
 
 import com.capstone.capstonedesign.domain.entity.cctv.CCTV;
 import com.capstone.capstonedesign.domain.vo.CongestionStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +14,8 @@ import java.util.List;
 @Entity
 public class MonthlyCongestion {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private int month;
     private double average;
     private int population;
@@ -29,6 +25,16 @@ public class MonthlyCongestion {
     @ManyToOne
     @JoinColumn(name = "cctv_id")
     private CCTV cctv;
+
+    @Builder
+    public MonthlyCongestion(int month, double average, int population, int amount, String status, CCTV cctv) {
+        this.month = month;
+        this.average = average;
+        this.population = population;
+        this.amount = amount;
+        this.status = status;
+        this.cctv = cctv;
+    }
 
     public void updateAverage(int population) {
         this.amount++;
@@ -43,7 +49,14 @@ public class MonthlyCongestion {
     public static List<MonthlyCongestion> createEmptyMonthlyCongestion(CCTV cctv) {
         List<MonthlyCongestion> response = new ArrayList<>();
         for (int month = 1; month < 13; month++) {
-            MonthlyCongestion monthlyCongestion = new MonthlyCongestion(month, 0, 0, 0, null, cctv);
+            MonthlyCongestion monthlyCongestion = MonthlyCongestion.builder()
+                    .month(month)
+                    .average(0)
+                    .population(0)
+                    .amount(0)
+                    .status(null)
+                    .cctv(cctv)
+                    .build();
             response.add(monthlyCongestion);
         }
         return response;

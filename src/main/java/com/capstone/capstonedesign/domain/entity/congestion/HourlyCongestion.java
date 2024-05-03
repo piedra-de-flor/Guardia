@@ -27,11 +27,12 @@ public class HourlyCongestion {
     private CCTV cctv;
 
     @Builder
-    public HourlyCongestion(int time, double average, int population, int amount, CCTV cctv) {
+    public HourlyCongestion(int time, double average, int population, int amount, String status, CCTV cctv) {
         this.hourOfDay = time;
         this.average = average;
         this.population = population;
         this.amount = amount;
+        this.status = status;
         this.cctv = cctv;
     }
 
@@ -53,6 +54,7 @@ public class HourlyCongestion {
                     .average(0)
                     .amount(0)
                     .population(0)
+                    .status(null)
                     .cctv(cctv)
                     .build();
 

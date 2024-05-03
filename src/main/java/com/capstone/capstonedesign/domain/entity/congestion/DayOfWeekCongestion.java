@@ -2,24 +2,20 @@ package com.capstone.capstonedesign.domain.entity.congestion;
 
 import com.capstone.capstonedesign.domain.entity.cctv.CCTV;
 import com.capstone.capstonedesign.domain.vo.CongestionStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 public class DayOfWeekCongestion {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private int dayOfWeek;
     private double average;
     private int population;
@@ -29,6 +25,16 @@ public class DayOfWeekCongestion {
     @ManyToOne
     @JoinColumn(name = "cctv_id")
     private CCTV cctv;
+
+    @Builder
+    public DayOfWeekCongestion(int dayOfWeek, double average, int population, int amount, String status, CCTV cctv) {
+        this.dayOfWeek = dayOfWeek;
+        this.average = average;
+        this.population = population;
+        this.amount = amount;
+        this.status = status;
+        this.cctv = cctv;
+    }
 
     public void updateAverage(int population) {
         this.amount++;
@@ -43,7 +49,15 @@ public class DayOfWeekCongestion {
     public static List<DayOfWeekCongestion> createEmptyDayOfWeekCongestion(CCTV cctv) {
         List<DayOfWeekCongestion> response = new ArrayList<>();
         for (int dayOfWeek = 1; dayOfWeek < 8; dayOfWeek++) {
-            DayOfWeekCongestion dayOfWeekCongestion = new DayOfWeekCongestion(dayOfWeek, 0, 0, 0, null, cctv);
+            DayOfWeekCongestion dayOfWeekCongestion = DayOfWeekCongestion.builder()
+                    .dayOfWeek(dayOfWeek)
+                    .average(0)
+                    .population(0)
+                    .amount(0)
+                    .status(null)
+                    .cctv(cctv)
+                    .build();
+
             response.add(dayOfWeekCongestion);
         }
         return response;
