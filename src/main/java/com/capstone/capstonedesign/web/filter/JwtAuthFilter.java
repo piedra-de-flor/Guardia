@@ -5,16 +5,12 @@ import com.capstone.capstonedesign.service.support.JwtTokenProvider;
 import com.capstone.capstonedesign.web.error.RestApiException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
-import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -26,19 +22,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        try {
-            String token = resolveToken(request);
+        String token = resolveToken(request);
 
-            if (token != null && jwtTokenProvider.validateToken(token)) {
-                Authentication authentication = jwtTokenProvider.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                throw new RestApiException(AuthErrorCode.AUTH_ERROR_CODE);
-            }
-        } catch (RestApiException ex) {
-            response.setStatus(ex.getErrorCode().getHttpStatus().value());
-            response.getWriter().write(ex.getErrorCode().getMessage());
-            return;
+        if (token != null && jwtTokenProvider.validateToken(token)) {
+            Authentication authentication = jwtTokenProvider.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         chain.doFilter(request, response);
@@ -56,12 +44,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 "/swagger-ui/favicon-16x16.png",
                 "/api-docs/json/swagger-config",
                 "/api-docs/json",
-                "/sign-in",
-                "/sign-up",
-                "/live-congestion",
-                "/hourly-congestion",
-                "/monthly-congestion",
-                "/day-of-week-congestion",};
+                "/live-congestion", "/hourly-congestion", "/day-of-week-congestion", "/monthly-congestion"};
         String path = request.getRequestURI();
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
     }
