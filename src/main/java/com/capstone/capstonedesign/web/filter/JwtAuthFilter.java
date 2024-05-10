@@ -1,6 +1,8 @@
 package com.capstone.capstonedesign.web.filter;
 
+import com.capstone.capstonedesign.domain.vo.AuthErrorCode;
 import com.capstone.capstonedesign.service.support.JwtTokenProvider;
+import com.capstone.capstonedesign.web.error.RestApiException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -8,6 +10,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -23,12 +26,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        String token = resolveToken((HttpServletRequest) request);
+        try {
+            String token = resolveToken(request);
 
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (token != null && jwtTokenProvider.validateToken(token)) {
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                throw new RestApiException(AuthErrorCode.AUTH_ERROR_CODE);
+            }
+        } catch (RestApiException ex) {
+            response.setStatus(ex.getErrorCode().getHttpStatus().value());
+            response.getWriter().write(ex.getErrorCode().getMessage());
+            return;
         }
+
         chain.doFilter(request, response);
     }
 
