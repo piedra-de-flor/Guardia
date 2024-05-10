@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/sign-in", "/sign-up").permitAll()
+                        .requestMatchers("/live-congestion", "/hourly-congestion", "/day-of-week-congestion", "/monthly-congestion").permitAll()
                         .requestMatchers("/api-statement", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().hasRole("USER")
                 )
