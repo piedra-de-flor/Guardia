@@ -55,7 +55,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 "/swagger-ui/favicon-32x32.png",
                 "/swagger-ui/favicon-16x16.png",
                 "/api-docs/json/swagger-config",
-                "/api-docs/json"};
+                "/api-docs/json",
+                "/sign-in",
+                "/sign-up",
+                "/live-congestion",
+                "/hourly-congestion",
+                "/monthly-congestion",
+                "/day-of-week-congestion",};
         String path = request.getRequestURI();
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
     }
