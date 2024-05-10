@@ -44,11 +44,11 @@ public class protectedTargetController {
     @GetMapping("/protected-target")
     public ResponseEntity<ProtectedTargetReadDto> read(
             @Parameter(description = "보호 대상 단일 조회 요청값", required = true)
-            @RequestBody ProtectedTargetReadRequestDto readRequestDto) {
+            @RequestParam long protectedTargetId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String memberEmail = authentication.getName();
 
-        return ResponseEntity.ok(service.read(memberEmail, readRequestDto));
+        return ResponseEntity.ok(service.read(memberEmail, protectedTargetId));
     }
 
     @Operation(summary = "보호 대상 전체 조회", description = "자신 소유의 보호 대상을 전체 조회합니다.")

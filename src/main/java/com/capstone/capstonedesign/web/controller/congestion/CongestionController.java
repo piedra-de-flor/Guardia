@@ -8,6 +8,7 @@ import com.capstone.capstonedesign.service.congestion.CongestionService;
 import com.capstone.capstonedesign.service.congestion.LiveCongestionBatchService;
 import com.capstone.capstonedesign.service.congestion.LiveCongestionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +31,8 @@ public class CongestionController {
     @ApiResponse(responseCode = "403", description = "JWT토큰이 잘못되었습니다")
     @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     @GetMapping("/live-congestion")
-    public ResponseEntity<LiveCongestionDto> readLiveCongestion(@RequestBody CCTVDto dto) {
-        LiveCongestionDto response = service.readLiveCongestion(dto.cctvId());
+    public ResponseEntity<LiveCongestionDto> readLiveCongestion(@RequestParam long cctvId) {
+        LiveCongestionDto response = service.readLiveCongestion(cctvId);
         return ResponseEntity.ok(response);
     }
 
@@ -41,8 +42,8 @@ public class CongestionController {
     @ApiResponse(responseCode = "403", description = "JWT토큰이 잘못되었습니다")
     @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     @GetMapping("/hourly-congestion")
-    public ResponseEntity<List<PeriodCongestionDto>> readHourlyCongestion(@RequestBody CCTVDto dto) {
-        List<PeriodCongestionDto> response = service.readHourlyCongestion(dto.cctvId());
+    public ResponseEntity<List<PeriodCongestionDto>> readHourlyCongestion(@RequestParam long cctvId) {
+        List<PeriodCongestionDto> response = service.readHourlyCongestion(cctvId);
         return ResponseEntity.ok(response);
     }
 
@@ -52,8 +53,8 @@ public class CongestionController {
     @ApiResponse(responseCode = "403", description = "JWT토큰이 잘못되었습니다")
     @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     @GetMapping("/day-of-week-congestion")
-    public ResponseEntity<List<PeriodCongestionDto>> readDayOfWeekCongestion(@RequestBody CCTVDto dto) {
-        List<PeriodCongestionDto> response = service.readDayOfWeekCongestion(dto.cctvId());
+    public ResponseEntity<List<PeriodCongestionDto>> readDayOfWeekCongestion(@RequestParam long cctvId) {
+        List<PeriodCongestionDto> response = service.readDayOfWeekCongestion(cctvId);
         return ResponseEntity.ok(response);
     }
 
@@ -63,8 +64,8 @@ public class CongestionController {
     @ApiResponse(responseCode = "403", description = "JWT토큰이 잘못되었습니다")
     @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     @GetMapping("/monthly-congestion")
-    public ResponseEntity<List<PeriodCongestionDto>> readMonthlyCongestion(@RequestBody CCTVDto dto) {
-        List<PeriodCongestionDto> response = service.readMonthlyCongestion(dto.cctvId());
+    public ResponseEntity<List<PeriodCongestionDto>> readMonthlyCongestion(@RequestParam long cctvId) {
+        List<PeriodCongestionDto> response = service.readMonthlyCongestion(cctvId);
         return ResponseEntity.ok(response);
     }
 

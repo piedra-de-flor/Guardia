@@ -39,8 +39,8 @@ public class ProtectedTargetService {
         return new ProtectedTargetIdDto(savedProtectedTarget.getId());
     }
 
-    public ProtectedTargetReadDto read(String email, ProtectedTargetReadRequestDto readRequestDto) {
-        ProtectedTarget protectedTarget = isMine(email, readRequestDto.protectedTargetId());
+    public ProtectedTargetReadDto read(String email, long protectedTargetId) {
+        ProtectedTarget protectedTarget = isMine(email, protectedTargetId);
 
         byte[] image = fileManager.loadImageAsResource(protectedTarget.getImage().getStoredFileName());
 
