@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class CongestionBatchService {
-    private final CongestionRepository congestionRepository;
     private final CongestionUpdater congestionUpdater;
     private final CCTVRepository cctvRepository;
 
@@ -22,7 +21,6 @@ public class CongestionBatchService {
     @Transactional
     public void updateHourlyCongestion() {
         List<CCTV> cctvs =  cctvRepository.findAll();
-
         for (CCTV cctv : cctvs) {
             congestionUpdater.updateHourlyCongestion(cctv);
         }
