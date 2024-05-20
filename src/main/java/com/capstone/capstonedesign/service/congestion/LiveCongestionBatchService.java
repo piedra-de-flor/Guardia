@@ -28,9 +28,10 @@ public class LiveCongestionBatchService {
     private final FileManager fileManager;
 
     @Async
-    @Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0 * * * * *")
     @Transactional
     public void updateLiveCongestion() {
+        log.info("schedule 1");
         List<CCTV> cctvs = cctvRepository.findAll();
 
         for (CCTV cctv : cctvs) {
