@@ -17,7 +17,7 @@ public class FrameGrabber {
 
         VideoCapture capture = new VideoCapture();
 
-        if (!capture.open("rtsp://192.168.219.112:8888/h264.sdp")) {
+        if (!capture.open("rtsp://172.20.10.2:8888/h264.sdp")) {
             throw new IOException("Error: Couldn't open RTSP stream.");
         }
 

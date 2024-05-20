@@ -1,4 +1,4 @@
-package com.capstone.capstonedesign.service.webClinet;
+package com.capstone.capstonedesign.service.ai.webClinet;
 
 import com.capstone.capstonedesign.dto.congestion.CongestionAPIResponseDto;
 import lombok.RequiredArgsConstructor;

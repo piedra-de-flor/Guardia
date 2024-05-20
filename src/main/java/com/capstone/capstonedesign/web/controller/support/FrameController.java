@@ -1,4 +1,4 @@
-package com.capstone.capstonedesign.web.controller;
+package com.capstone.capstonedesign.web.controller.support;
 
 import com.capstone.capstonedesign.service.cctv.FrameGrabber;
 import lombok.RequiredArgsConstructor;
