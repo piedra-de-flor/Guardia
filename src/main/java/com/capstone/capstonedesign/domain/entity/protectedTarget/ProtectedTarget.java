@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -41,6 +43,6 @@ public class ProtectedTarget {
     }
 
     public boolean isMine(Member member) {
-        return this.member.getId() == member.getId();
+        return Objects.equals(this.member.getEmail(), member.getEmail());
     }
 }

@@ -81,7 +81,7 @@ public class ProtectedTargetService {
         ProtectedTarget protectedTarget = repository.findById(protectedTargetId)
                 .orElseThrow(NoSuchElementException::new);
 
-        if (protectedTarget.isMine(member)) {
+        if (!protectedTarget.isMine(member)) {
             throw new IllegalArgumentException("본인 소유의 보호 대상이 아닙니다.");
         } else {
             return protectedTarget;
