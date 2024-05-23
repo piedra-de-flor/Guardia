@@ -24,7 +24,7 @@ public class LiveCongestionBatchService {
     private final CCTVRepository cctvRepository;
 
     @Async
-    @Scheduled(cron = "0 * * * * *")
+    //@Scheduled(cron = "0 * * * * *")
     @Transactional
     public void updateLiveCongestion() {
         log.info("schedule 1");
