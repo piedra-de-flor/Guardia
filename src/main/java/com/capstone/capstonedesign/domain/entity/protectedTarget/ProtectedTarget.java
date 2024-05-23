@@ -1,7 +1,6 @@
 package com.capstone.capstonedesign.domain.entity.protectedTarget;
 
 import com.capstone.capstonedesign.domain.entity.membership.Member;
-import com.capstone.capstonedesign.domain.vo.Face;
 import com.capstone.capstonedesign.domain.vo.Image;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,7 +18,6 @@ public class ProtectedTarget {
     private String name;
     private int age;
     private Image image;
-    private Face face;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
