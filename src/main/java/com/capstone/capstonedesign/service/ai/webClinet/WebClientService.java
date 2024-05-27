@@ -4,14 +4,18 @@ import com.capstone.capstonedesign.dto.congestion.CongestionAPIResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +23,7 @@ import java.util.Map;
 @Service
 public class WebClientService {
     private final WebClient webClient;
+    private static final String baseUrl = "localhost:5000";
 
     public int getDetectedPersons(byte[] imageBytes) {
         try {
@@ -52,5 +57,40 @@ public class WebClientService {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public MultipartFile detectTarget(byte[] cctvImage, byte[] targetImage) throws IOException {
+        ByteArrayResource cctvImageResource = new ByteArrayResource(cctvImage) {
+            @Override
+            public String getFilename() {
+                return "cctvImage.jpg";
+            }
+        };
+
+        ByteArrayResource targetImageResource = new ByteArrayResource(targetImage) {
+            @Override
+            public String getFilename() {
+                return "targetImage.jpg";
+            }
+        };
+
+        MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
+        bodyMap.add("cctvImage", cctvImageResource);
+        bodyMap.add("targetImage", targetImageResource);
+
+        Mono<byte[]> responseMono = webClient.post()
+                .uri("/detect")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(bodyMap))
+                .retrieve()
+                .bodyToMono(byte[].class);
+
+        byte[] responseBytes = responseMono.block();
+
+        if (responseBytes == null) {
+            throw new RuntimeException("Failed to detect target");
+        }
+
+        return new MockMultipartFile("file", "result.jpg", MediaType.IMAGE_JPEG_VALUE, new ByteArrayInputStream(responseBytes));
     }
 }
