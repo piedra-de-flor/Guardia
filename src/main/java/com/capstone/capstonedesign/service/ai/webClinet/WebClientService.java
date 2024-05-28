@@ -4,6 +4,7 @@ import com.capstone.capstonedesign.dto.congestion.CongestionAPIResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -23,7 +24,6 @@ import java.util.Map;
 @Service
 public class WebClientService {
     private final WebClient webClient;
-    private static final String baseUrl = "localhost:5000";
 
     public int getDetectedPersons(byte[] imageBytes) {
         try {
@@ -74,14 +74,14 @@ public class WebClientService {
             }
         };
 
-        MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
-        bodyMap.add("cctvImage", cctvImageResource);
-        bodyMap.add("targetImage", targetImageResource);
+        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+        bodyBuilder.part("cctv", cctvImageResource, MediaType.IMAGE_JPEG);
+        bodyBuilder.part("target", targetImageResource, MediaType.IMAGE_JPEG);
 
         Mono<byte[]> responseMono = webClient.post()
                 .uri("/detect")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
-                .body(BodyInserters.fromMultipartData(bodyMap))
+                .body(BodyInserters.fromMultipartData(bodyBuilder.build()))
                 .retrieve()
                 .bodyToMono(byte[].class);
 
