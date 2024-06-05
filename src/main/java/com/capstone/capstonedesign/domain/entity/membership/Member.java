@@ -30,8 +30,8 @@ public class Member implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    @OneToMany
-    private List<ProtectedTarget> protectedTargets;
+    @OneToMany(mappedBy = "member")
+    private List<ProtectedTarget> protectedTargets = new ArrayList<>();
 
     @Builder
     public Member(String name, String email, String password, List<String> roles) {

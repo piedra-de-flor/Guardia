@@ -21,7 +21,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class FileManager {
     //private static final String BASE_PATH = "/root/capstone-design/protected-image";
-    private static final String BASE_PATH = "C:/Users/USER/Desktop";
+    private static final String BASE_PATH = "C:/Users/USER/Desktop/protected_target";
 
     public Image uploadImage(MultipartFile image) {
         String originName = image.getOriginalFilename();
