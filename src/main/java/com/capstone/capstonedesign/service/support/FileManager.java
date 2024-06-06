@@ -48,7 +48,7 @@ public class FileManager {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         String current_date = simpleDateFormat.format(new Date());
 
-        return originName + current_date;
+        return originName + current_date + Math.random();
     }
 
     private String createDirPath(String changedName) {
