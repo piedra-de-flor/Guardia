@@ -9,6 +9,7 @@ import com.capstone.capstonedesign.repository.ProtectedTargetRepository;
 import com.capstone.capstonedesign.service.support.FileManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class ProtectedTargetService {
     private final MemberRepository memberRepository;
     private final FileManager fileManager;
 
+    @Transactional
     public ProtectedTargetIdDto create(String email, ProtectedTargetCreateDto createDto, MultipartFile file) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(NoSuchElementException::new);
@@ -62,12 +64,14 @@ public class ProtectedTargetService {
         return new ProtectedTargetReadAllDto(protectedTargetReadDtos);
     }
 
+    @Transactional
     public ProtectedTargetUpdateDto update(String email, ProtectedTargetUpdateDto updateDto) {
         ProtectedTarget protectedTarget = isMine(email, updateDto.protectedTargetId());
         protectedTarget.update(updateDto.name(), updateDto.age());
         return updateDto;
     }
 
+    @Transactional
     public Long delete(String email, ProtectedTargetDeleteDto deleteDto) {
         ProtectedTarget protectedTarget = isMine(email, deleteDto.protectedTargetId());
         repository.delete(protectedTarget);

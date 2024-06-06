@@ -12,9 +12,10 @@ import java.io.IOException;
 
 @Service
 public class FrameGrabber {
-    public byte[] frameGrab() throws IOException {
+    static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
+    }
+    public byte[] frameGrab() throws IOException {
         VideoCapture capture = new VideoCapture();
 
         if (!capture.open("rtsp://192.168.219.112:8888/h264.sdp")) {

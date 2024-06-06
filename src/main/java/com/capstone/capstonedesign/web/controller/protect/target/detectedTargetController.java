@@ -44,4 +44,16 @@ public class detectedTargetController {
 
         return new ResponseEntity<>(response.getBytes(), headers, HttpStatus.OK);
     }
+
+    @GetMapping("/detect-info")
+    public ResponseEntity<String[]> detectInfo() {
+        String floor = "A";
+        String section = "1";
+
+        String[] info = new String[2];
+        info[0] = section;
+        info[1] = floor;
+
+        return ResponseEntity.ok(info);
+    }
 }
