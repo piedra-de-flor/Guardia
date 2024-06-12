@@ -52,7 +52,7 @@ public class FileManager {
     }
 
     private String createDirPath(String changedName) {
-        return BASE_PATH + changedName;
+        return BASE_PATH + "/" +changedName;
     }
 
     public byte[] loadImageAsResource(String imageName) {

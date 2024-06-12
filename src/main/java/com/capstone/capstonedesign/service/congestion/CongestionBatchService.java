@@ -17,7 +17,7 @@ public class CongestionBatchService {
     private final CongestionUpdater congestionUpdater;
     private final CCTVRepository cctvRepository;
 
-    //@Scheduled(cron = "0 59 * * * *")
+    //@Scheduled(cron = "0 58 * * * *")
     @Transactional
     public void updateHourlyCongestion() {
         List<CCTV> cctvs =  cctvRepository.findAll();
