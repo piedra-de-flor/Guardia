@@ -55,19 +55,23 @@ public class FileManager {
         return BASE_PATH + "/" +changedName;
     }
 
-    public byte[] loadImageAsResource(String imageName) {
+    public byte[] loadImageAsResource(String imagePath) {
         try {
-            Path imagePath = Paths.get(imageName).resolve(imageName).normalize();
-            Resource resource = new UrlResource(imagePath.toUri());
+            log.info("Loading image from path: " + imagePath);
+            Path path = Paths.get(imagePath).normalize();
+            Resource resource = new UrlResource(path.toUri());
             if (resource.exists()) {
-                byte[] imageBytes = Files.readAllBytes(imagePath);
-                return imageBytes;
+                log.info("Resource exists, reading bytes");
+                return Files.readAllBytes(path);
             } else {
-                throw new FileNotFoundException();
+                log.error("File not found: " + imagePath);
+                throw new FileNotFoundException("File not found: " + imagePath);
             }
-        } catch (MalformedURLException | FileNotFoundException e) {
+        } catch (MalformedURLException e) {
+            log.error("Malformed URL: " + imagePath, e);
             throw new IllegalArgumentException("이미지를 찾을 수 없습니다.", e);
         } catch (IOException e) {
+            log.error("IO Exception while processing image: " + imagePath, e);
             throw new IllegalArgumentException("이미지 처리하는 과정에서 오류가 발생하였습니다.", e);
         }
     }

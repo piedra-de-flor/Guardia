@@ -6,12 +6,14 @@ import com.capstone.capstonedesign.service.ai.webClinet.WebClientService;
 import com.capstone.capstonedesign.service.cctv.FrameGrabber;
 import com.capstone.capstonedesign.service.support.FileManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class DetectedService {
